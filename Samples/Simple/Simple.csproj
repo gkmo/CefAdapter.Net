@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <StartupObject>CefAdapter.Samples.Simple.Program</StartupObject>
+    <ApplicationIcon />
+	  <RuntimeIdentifiers>win10-x64;ubuntu.16.10-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CefAdapter.Net\CefAdapter.Net.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetMQ" Version="4.0.0.1" />
+  </ItemGroup>
+
+  <Target Name="PostBuildLinux" Condition="'$(OS)' == 'Unix' " AfterTargets="PostBuildEvent">
+    <Message Text="Copying Linux dependencies..." Importance="high" />
+    <Exec Command="rsync -r ../../build/CefAdapter.Browser/$(ConfigurationName)/ $(ProjectDir)$(OutDir)" />            
+  </Target>
+  <Target Name="PostBuildWindows" Condition="'$(OS)' == 'Windows_NT' " AfterTargets="PostBuildEvent">
+    <Message Text="Copying Windows dependencies..." Importance="high" />
+    <Exec Command="XCOPY ..\..\build\CefAdapter.Browser\$(ConfigurationName) $(ProjectDir)$(OutDir) /Y /E" />    
+  </Target>
+</Project>
