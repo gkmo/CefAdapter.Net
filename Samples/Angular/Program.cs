@@ -16,6 +16,15 @@ namespace Angular
     {
         public static void Main(string[] args)
         {
+            if (!Application.CheckDependencies())
+            {
+                Console.WriteLine($"Unable to automatically download dependencies from {Application.DependencyUrl}");
+                Console.WriteLine("Press ENTER to exit.");
+                Console.ReadLine();
+
+                return;
+            }
+
             var webHost = CreateWebHostBuilder(args).Build();
             
             webHost.Start();

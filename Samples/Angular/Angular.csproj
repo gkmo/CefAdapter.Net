@@ -61,14 +61,10 @@
   </Target>
 
   <Target Name="PostBuildLinux" Condition="'$(OS)' == 'Unix' " AfterTargets="PostBuildEvent">
-    <Message Text="Copying Linux dependencies..." Importance="high" />
-    <Exec Command="rsync -r ../../build/CefAdapter.Browser/$(ConfigurationName)/ $(ProjectDir)$(OutDir)" />            
     <Message Text="Copying ClientApp..." Importance="high" />
     <Exec Command="rsync -r  $(ProjectDir)ClientApp/dist $(ProjectDir)$(OutDir)ClientApp/dist/" /> 
   </Target>
   <Target Name="PostBuildWindows" Condition="'$(OS)' == 'Windows_NT' " AfterTargets="PostBuildEvent">
-    <Message Text="Copying Windows dependencies..." Importance="high" />
-    <Exec Command="XCOPY ..\..\build\CefAdapter.Browser\$(ConfigurationName) $(ProjectDir)$(OutDir) /Y /E" />
     <Message Text="Copying ClientApp..." Importance="high" />
     <Exec Command="XCOPY $(ProjectDir)ClientApp\dist $(ProjectDir)$(OutDir)ClientApp\dist\ /Y /E" />    
   </Target>

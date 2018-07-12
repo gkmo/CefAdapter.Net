@@ -5,16 +5,84 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Net;
+using System.IO.Compression;
 
 namespace CefAdapter
 {
     public class Application
     {
+        private const string BASE_CEFADAPTER_ADDRESS = "https://github.com/gkmo/CefAdapter/releases/download/v0.0.1-alpha/";
+        private const string WINDOWS_BINARY_FILE = "cefadapter_binary_0.0.1_windows32.zip";
+        private const string LINUX_BINARY_FILE = "cefadapter_binary_0.0.1_linux32.zip";
+
         private readonly Dictionary<int, BrowserWindow> _browserWindows = new Dictionary<int, BrowserWindow>();
         private readonly InterProcessCommunicator _interProcessCommunicator;
         private readonly string _initialUrl;
 
-        public Application(string initialPage)
+        public static string DependencyUrl
+        {
+            get
+            {
+                var zippedFilename = LINUX_BINARY_FILE;
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    zippedFilename = WINDOWS_BINARY_FILE;
+                }
+
+                return BASE_CEFADAPTER_ADDRESS + zippedFilename;
+            }
+        }
+
+        public static bool CheckDependencies(bool downloadIfNeeded = true)
+        {
+            try
+            {
+                var zippedFilename = LINUX_BINARY_FILE;
+
+                var exeExtension = "";
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    exeExtension = ".exe";
+                    zippedFilename = WINDOWS_BINARY_FILE;
+                }
+
+                var rootDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                var cefAdapterPath = Path.Combine(rootDirectory, "CefAdapter" + exeExtension);
+
+                if (File.Exists(cefAdapterPath))
+                {
+                    return true;
+                }
+
+                if (!File.Exists(zippedFilename))
+                {
+                    if (!downloadIfNeeded)
+                    {
+                        return false;
+                    }
+
+                    var webClient = new WebClient
+                    {
+                        BaseAddress = BASE_CEFADAPTER_ADDRESS
+                    };
+                    
+                    webClient.DownloadFile(zippedFilename, zippedFilename);
+                }
+
+                ZipFile.ExtractToDirectory(zippedFilename, rootDirectory);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public Application(string initialPage, string cefAdapterPath = "./CefAdapter")
         {
             _interProcessCommunicator = new InterProcessCommunicator();
             _interProcessCommunicator.MessageReceived += OnMessageReceived;
@@ -41,9 +109,12 @@ namespace CefAdapter
                 exeExtension = ".exe";
             }
 
+            var rootDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var cefAdapterPath = Path.Combine(rootDirectory, "CefAdapter" + exeExtension);
+
             var process = new Process
             {
-                StartInfo = new ProcessStartInfo("CefAdapter.Browser" + exeExtension, $"--url={_initialUrl}")
+                StartInfo = new ProcessStartInfo(cefAdapterPath, $"--url={_initialUrl}")
             };
 
             if (process.Start())

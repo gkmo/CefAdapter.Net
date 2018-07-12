@@ -11,6 +11,15 @@ namespace CefAdapter.Samples.Simple
 
         static void Main(string[] args)
         {
+            if (!Application.CheckDependencies())
+            {
+                Console.WriteLine($"Unable to automatically download dependencies from {Application.DependencyUrl}");
+                Console.WriteLine("Press ENTER to exit.");
+                Console.ReadLine();
+
+                return;
+            }
+
             var application = new Application(@"../../../src/presentation/index.html");
 
             application.BrowserWindowCreated += OnBrowserWindowCreated;
