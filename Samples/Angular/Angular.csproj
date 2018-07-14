@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" />
     <PackageReference Include="NetMQ" Version="4.0.0.1" />
   </ItemGroup>
 
@@ -62,8 +62,8 @@
 
   <Target Name="PostBuildLinux" Condition="'$(OS)' == 'Unix' " AfterTargets="PostBuildEvent">
     <Message Text="Copying ClientApp..." Importance="high" />
-    <Exec Command="mkdir -p $(ProjectDir)$(OutDir)ClientApp/dist" /> 
-    <Exec Command="rsync -r $(ProjectDir)ClientApp/dist/ $(ProjectDir)$(OutDir)ClientApp/dist" />    
+    <Exec Command="mkdir -p $(ProjectDir)$(OutDir)ClientApp" /> 
+    <Exec Command="rsync -r $(ProjectDir)ClientApp/dist/ $(ProjectDir)$(OutDir)ClientApp" />    
   </Target>
   <Target Name="PostBuildWindows" Condition="'$(OS)' == 'Windows_NT' " AfterTargets="PostBuildEvent">
     <Message Text="Copying ClientApp..." Importance="high" />
