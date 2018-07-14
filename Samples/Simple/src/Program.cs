@@ -11,9 +11,11 @@ namespace CefAdapter.Samples.Simple
 
         static void Main(string[] args)
         {
-            if (!Application.CheckDependencies())
+            var dependenciesInstaller = new DependenciesInstaller("../Dependencies");
+
+            if (!dependenciesInstaller.CheckDependencies())
             {
-                Console.WriteLine($"Unable to automatically download dependencies from {Application.DependencyUrl}");
+                Console.WriteLine($"Unable to automatically download dependencies.");
                 Console.WriteLine("Press ENTER to exit.");
                 Console.ReadLine();
 

@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.1" />
     <PackageReference Include="NetMQ" Version="4.0.0.1" />
   </ItemGroup>
 
@@ -56,13 +56,14 @@
   </Target>
 
   <Target Name="BuildAngularApp" AfterTargets="PreBuildEvent">
-    <Message Text="Building Angular App..." Importance="high" />
+    <Message Text="Building Angular App..." Importance="high" />    
     <Exec WorkingDirectory="$(ProjectDir)ClientApp" Command="npm run-script build" />    
   </Target>
 
   <Target Name="PostBuildLinux" Condition="'$(OS)' == 'Unix' " AfterTargets="PostBuildEvent">
     <Message Text="Copying ClientApp..." Importance="high" />
-    <Exec Command="rsync -r  $(ProjectDir)ClientApp/dist $(ProjectDir)$(OutDir)ClientApp/dist/" /> 
+    <Exec Command="mkdir -p $(ProjectDir)$(OutDir)ClientApp/dist" /> 
+    <Exec Command="rsync -r $(ProjectDir)ClientApp/dist/ $(ProjectDir)$(OutDir)ClientApp/dist" />    
   </Target>
   <Target Name="PostBuildWindows" Condition="'$(OS)' == 'Windows_NT' " AfterTargets="PostBuildEvent">
     <Message Text="Copying ClientApp..." Importance="high" />

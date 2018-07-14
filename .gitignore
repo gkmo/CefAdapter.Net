@@ -2,5 +2,6 @@
 /CefAdapter.Net/bin
 /CefAdapter.Net/obj
 *.user
-Samples/Simple/obj
-Samples/Simple/bin
+Samples/**/obj
+Samples/**/bin
+Samples/Dependencies
