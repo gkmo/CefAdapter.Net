@@ -1,5 +1,11 @@
 # CefAdapter.Net
 
+## Requirements
+
+.NET Core SDK 2.1+ (https://www.microsoft.com/net/learn/get-started/windows)
+
+For the Angular and React samples Node JS (https://nodejs.org/en/) is also required.
+
 ## Building and running the Angular sample
 
 To run the Angular sample application you must first restore the Angular NPM dependencies.
