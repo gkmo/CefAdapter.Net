@@ -1,5 +1,7 @@
 # CefAdapter.Net
 
+Create cross-platform (Windows and Linux) HTML5 UI for your .NET projects.
+
 ## Requirements
 
 .NET Core SDK 2.1+ (https://www.microsoft.com/net/learn/get-started/windows)
